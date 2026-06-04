@@ -6,6 +6,8 @@ const path = require("path");
 const connectDB = require("./config/db.config");
 const authorRouter = require("./router/author.routes");
 const bookRouter = require("./router/book.routes");
+const authRouter = require("./router/auth.routes");
+const quoteRouter = require("./router/quote.routes");
 const errorMiddleware = require("./middleware/error.middleware");
 
 const app = express();
@@ -17,8 +19,10 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 connectDB();
 
+app.use(authRouter);
 app.use(authorRouter);
 app.use(bookRouter);
+app.use(quoteRouter);
 
 app.use(errorMiddleware);
 

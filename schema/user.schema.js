@@ -24,6 +24,18 @@ const User = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verifyCode: {
+      type: String,
+      default: null,
+    },
+    verifyCodeExpires: {
+      type: Date,
+      default: null,
+    },
   },
   {
     versionKey: false,
