@@ -1,26 +1,26 @@
 const nodemailer = require("nodemailer");
+const CustomErrorHandler = require("../error/error");
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS, // Gmail App Password
-  },
-});
+async function sendEmail(email, code) {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "aminboyevalibek077@gmail.com",
+        pass: process.env.GOOGLE_PASS,
+      },
+    });
 
-/**
- * Email yuborish
- * @param {string} to - Qabul qiluvchi email
- * @param {string} subject - Mavzu
- * @param {string} html - HTML kontent
- */
-const sendEmail = async (to, subject, html) => {
-  await transporter.sendMail({
-    from: `"Kitoblar API" <${process.env.EMAIL_USER}>`,
-    to,
-    subject,
-    html,
-  });
-};
+    await transporter.sendMail({
+      subject: "DevBook",
+      text: "lorem ipsum",
+      from: "aminboyevalibek077@gmail.com",
+      to: email,
+      html: `<b style="color: blue; font-size : 36px ">${code}</b>`,
+    });
+  } catch (err) {
+    throw CustomErrorHandler.BadRequest("error.message");
+  }
+}
 
 module.exports = sendEmail;

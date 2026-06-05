@@ -4,9 +4,9 @@ const UserSchema = require("../schema/user.schema");
 const CustomErrorHandler = require("../error/error");
 const sendEmail = require("../utils/sendEmail");
 
-const generateCode = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-};
+const randomcode = Array.from({ length: 6 }, () =>
+  Math.floor(Math.random() * 9),
+).join("");
 
 const register = async (req, res, next) => {
   try {
@@ -29,7 +29,7 @@ const register = async (req, res, next) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const verifyCode = generateCode();
+    const verifyCode = randomcode;
     const verifyCodeExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 daqiqa
 
     // akkaunt yaratish
@@ -42,21 +42,7 @@ const register = async (req, res, next) => {
     });
 
     // Emailga kod yuborish
-    await sendEmail(
-      email,
-      "Email tasdiqlash kodi",
-      `
-        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #eee; border-radius: 8px;">
-          <h2 style="color: #333;">Xush kelibsiz, ${username}!</h2>
-          <p>Hisobingizni tasdiqlash uchun quyidagi kodni kiriting:</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <span style="font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #4F46E5;">${verifyCode}</span>
-          </div>
-          <p style="color: #888; font-size: 13px;">Kod 10 daqiqa ichida amal qiladi.</p>
-          <p style="color: #888; font-size: 13px;">Agar siz ro'yxatdan o'tmagan bo'lsangiz, ushbu xabarni e'tiborsiz qoldiring.</p>
-        </div>
-      `,
-    );
+    await sendEmail(email, verifyCode);
 
     res.status(201).json({
       message: `${email} manziliga tasdiqlash kodi yuborildi`,
