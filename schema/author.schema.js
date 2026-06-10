@@ -10,15 +10,23 @@ const Author = new Schema(
       type: String,
       required: true,
       enum: {
-        values: ["Temuriylar davri", "Jadid davri", "Sovet davri", "Mustaqillik davri"],
+        values: [
+          "Temuriylar davri",
+          "Jadid davri",
+          "Sovet davri",
+          "Mustaqillik davri",
+        ],
         message: "{VALUE} bunday qiymat ko'rsatilmagan",
       },
+    },
+
+    picture: {
+      type: String,
+      required: true,
     },
     work: { type: String, required: true },
     region: { type: String, required: true },
     photo: { type: String, default: null },
   },
-  { versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: true },
 );
-
-module.exports = model("Author", Author);

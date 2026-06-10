@@ -31,6 +31,8 @@ authorRouter.put(
   upload.single("photo"),
   updateAuthor,
 );
+authorRouter.post("/add_author",authMiddleware,upload.single("photo"),addAuthor,);
+authorRouter.put("/update_author/:id",authMiddleware,upload.single("photo"),updateAuthor,);
 authorRouter.delete("/delete_author/:id", authMiddleware, deleteAuthor);
 
 module.exports = authorRouter;

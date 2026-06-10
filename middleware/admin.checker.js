@@ -1,16 +1,18 @@
-const CustomErrorHandler = require("../error/error");
 const jwt = require("jsonwebtoken");
+const CustomErrorHandler = require("../error/error");
 
 module.exports = function adminChecker(req, res, next) {
   try {
-    if (!req.user) {
-      throw CustomErrorHandler.unauthorized("Token topilmadi");
+    const token = req.cookies.accessToken;
+
+    if (!token) {
+      throw CustomErrorHandler.BadRequest("No token provided");
     }
+    const decode = jwt.verify(token, process.env.SECRET_KEY);
+    req.user = decode;
 
     if (req.user.role !== "admin") {
-      throw CustomErrorHandler.forbidden(
-        "Faqat admin ushbu amalni bajarishi mumkin",
-      );
+      throw CustomErrorHandler.Forbidden("You are not admin");
     }
 
     next();
